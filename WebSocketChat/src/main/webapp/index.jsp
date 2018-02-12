@@ -52,7 +52,13 @@
         <h1>Getting Started with JSR 356 - Annotated Endpoint</h1>
 
         <div style="text-align: center;">
+          
             <form action=""> 
+                <h2>Text Data</h2>
+                <input onclick="conectar();" value="Say User" type="button"> 
+                <input id="user" value="user" type="text"><br>
+            </form>
+             <form action=""> 
                 <h2>Text Data</h2>
                 <input onclick="sayHello();" value="Say Hello" type="button"> 
                 <input id="myField" value="WebSocket" type="text"><br>
