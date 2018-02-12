@@ -36,7 +36,7 @@ public class PrimerEndpoint {
         for (Session s : sessionQueManda.getOpenSessions()) {
             String user= (String)sessionQueManda.getUserProperties().get("user");
             if (!s.equals(sessionQueManda)) {
-                s.getBasicRemote().sendText(user+mensaje);
+                s.getBasicRemote().sendText(user+" dijo: "+mensaje);
             }            
         }
     }
