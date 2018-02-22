@@ -59,7 +59,30 @@
     </head>
     <body>
         <h1>Getting Started with JSR 356 - Annotated Endpoint</h1>
-<script>
+
+        <div style="text-align: center;">
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <form action=""> 
+                <h2>Text Data</h2>
+                <input onclick="conectar();" value="Say User" type="button"> 
+                <input id="user" value="user" type="text">
+                <input id="password" value="password" type="text"><br>
+            </form>
+             <form action=""> 
+                <h2>Text Data</h2>
+                <input onclick="sayHello();" value="Say Hello" type="button"> 
+                <input id="myField" value="WebSocket" type="text"><br>
+            </form>
+            <form action=""> 
+                <h2>Binary Data</h2>
+                <input onclick="echoBinary();" value="Echo" type="button"> 
+                <input id="myField2" value="12345678" type="text"><br>
+            </form>
+        </div>
+        <div id="output"></div>
+        <script language="javascript" type="text/javascript" src="websocket.js">
+        </script>
+        <script>
             var idToken;
 	function onSignIn(googleUser) {
       var profile = googleUser.getBasicProfile();
@@ -84,28 +107,6 @@
     }
 
 	</script>
-        <div style="text-align: center;">
-          <div class="g-signin2" data-onsuccess="onSignIn"></div>
-            <form action=""> 
-                <h2>Text Data</h2>
-                <input onclick="conectar();" value="Say User" type="button"> 
-                <input id="user" value="user" type="text">
-                <input id="password" value="password" type="text"><br>
-            </form>
-             <form action=""> 
-                <h2>Text Data</h2>
-                <input onclick="sayHello();" value="Say Hello" type="button"> 
-                <input id="myField" value="WebSocket" type="text"><br>
-            </form>
-            <form action=""> 
-                <h2>Binary Data</h2>
-                <input onclick="echoBinary();" value="Echo" type="button"> 
-                <input id="myField2" value="12345678" type="text"><br>
-            </form>
-        </div>
-        <div id="output"></div>
-        <script language="javascript" type="text/javascript" src="websocket.js">
-        </script>
            <a href="#" onclick="signOut();">Sign out</a>
 <script>
   function signOut() {

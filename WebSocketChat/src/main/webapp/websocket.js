@@ -48,9 +48,9 @@ var token = "Token";
 //  }
 //};
 var websocket;
-
+    var output = document.getElementById("output");
 function conectar() {
-    websocket = new WebSocket(wsUri + "/" + user.value,+"/"+password.value, []);
+    websocket = new WebSocket(wsUri + "/" + user.value , []);
     websocket.onopen = function (evt) {
         onOpen(evt)
     };
@@ -64,7 +64,7 @@ function conectar() {
         onClose(evt)
     };
 }
-    var output = document.getElementById("output");
+
 
 
 function sayHello() {
