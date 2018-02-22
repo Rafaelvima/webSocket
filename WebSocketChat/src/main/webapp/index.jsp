@@ -52,7 +52,7 @@
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <meta name="google-signin-scope" content="profile email">
 <meta name="google-signin-client_id"
-     content="1027953223368-th3hh3onqnevoft8sgliam4kvntmtrvj.apps.googleusercontent.com">
+     content="711759179480-02hvn80gi54ect4uks40tj5lcb831e1j.apps.googleusercontent.com">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Getting Started with JSR 356 - Annotated Endpoint</title>
 
@@ -89,7 +89,8 @@
             <form action=""> 
                 <h2>Text Data</h2>
                 <input onclick="conectar();" value="Say User" type="button"> 
-                <input id="user" value="user" type="text"><br>
+                <input id="user" value="user" type="text">
+                <input id="password" value="password" type="text"><br>
             </form>
              <form action=""> 
                 <h2>Text Data</h2>

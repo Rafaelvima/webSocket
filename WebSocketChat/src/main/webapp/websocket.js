@@ -38,7 +38,7 @@
  * holder.
  */
 
-var wsUri = "ws://localhost:8083/WebSocketChat/endpoint";
+var wsUri = "ws://localhost:8080/WebSocketChat/endpoint";
 console.log("Connecting to " + wsUri);
 var token = "Token";
 //var user=document.getElementById("user");
@@ -50,7 +50,7 @@ var token = "Token";
 var websocket;
 
 function conectar() {
-    websocket = new WebSocket(wsUri + "/" + user.value, []);
+    websocket = new WebSocket(wsUri + "/" + user.value,+"/"+password.value, []);
     websocket.onopen = function (evt) {
         onOpen(evt)
     };
