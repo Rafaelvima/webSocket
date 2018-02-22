@@ -82,7 +82,7 @@ public class PrimerEndpoint {
                 Logger.getLogger(PrimerEndpoint.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        } else {}
+        } else {
 
             /*try {
 //                ObjectMapper mapper = new ObjectMapper();
@@ -123,7 +123,7 @@ public class PrimerEndpoint {
             } catch (Exception ex) {
                 Logger.getLogger(ChatEndPoint.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }*/
+        */}
     }
 
     
