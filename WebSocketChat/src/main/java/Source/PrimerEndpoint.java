@@ -65,6 +65,7 @@ public class PrimerEndpoint {
 //            }            
 //        }
 //    }
+    //id oscar
      @OnMessage
     public void echoText(MensajeCifrado mensaje, Session sessionQueManda) throws IOException {
         if (!sessionQueManda.getUserProperties().get("login").equals("OK")) {
