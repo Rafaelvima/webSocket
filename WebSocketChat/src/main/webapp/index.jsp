@@ -12,7 +12,6 @@
 <script type="text/javascript" src="js/lib/pbkdf2.js"></script>
 <script type="text/javascript" src="js/AesUtil.js"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
 <meta name="google-signin-scope" content="profile email">
 <meta name="google-signin-client_id"
      content="1027953223368-th3hh3onqnevoft8sgliam4kvntmtrvj.apps.googleusercontent.com">
@@ -28,7 +27,7 @@
                 <input onclick="conectar();" value="conectar" type="button"> 
                 <h2>Text Data</h2>
                 <input onclick="sayHello();" value="Say Hello" type="button"> 
-                <input id="destino" value="" type="text">
+                <input id="destino" value="yo" type="text">
                 <input id="myField" value="WebSocket" type="text"><br>
                 <input onclick="getCanales();" value="getCanales" type="button"> 
                 <select id="canales">
@@ -47,7 +46,6 @@
         
         <script>
             var idToken;
-            debugger;
 	function onSignIn(googleUser) {
              debugger;
       var profile = googleUser.getBasicProfile();

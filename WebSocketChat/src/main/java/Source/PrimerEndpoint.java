@@ -33,7 +33,7 @@ import util.AesUtil;
  *
  * @author Rafa
  */
-@ServerEndpoint( value = "/chat/{user}/{pass}",
+@ServerEndpoint( value = "/endpoint/{user}/{pass}",
         decoders = MessageDecoder.class,
   encoders = MessageEncoder.class,
   configurator = ServletAwareConfig.class)
