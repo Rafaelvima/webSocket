@@ -35,12 +35,13 @@ import util.AesUtil;
  */
 @ServerEndpoint( value = "/chat/{user}/{pass}",
         decoders = MessageDecoder.class,
-  encoders = MessageEncoder.class)
+  encoders = MessageEncoder.class,
+  configurator = ServletAwareConfig.class)
 public class PrimerEndpoint {
    
      @OnOpen
     public void onOpen(Session session,
-            @PathParam("user")String user) throws IOException {
+            @PathParam("user")String user, @PathParam("pass")String pass) throws IOException {
 
       session.getUserProperties().put("user", user);
       if (!user.equals("google")) {
