@@ -12,6 +12,7 @@
 <script type="text/javascript" src="js/lib/pbkdf2.js"></script>
 <script type="text/javascript" src="js/AesUtil.js"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
 <meta name="google-signin-scope" content="profile email">
 <meta name="google-signin-client_id"
      content="1027953223368-th3hh3onqnevoft8sgliam4kvntmtrvj.apps.googleusercontent.com">
@@ -23,10 +24,11 @@
             <form action=""> 
                 <h2>Text Data</h2>
                 <input id="user" value="google" type="text"><br>
+                 <input id="pass" value="google" type="text"><br>
                 <input onclick="conectar();" value="conectar" type="button"> 
                 <h2>Text Data</h2>
                 <input onclick="sayHello();" value="Say Hello" type="button"> 
-                <input id="destino" value="Juan" type="text">
+                <input id="destino" value="" type="text">
                 <input id="myField" value="WebSocket" type="text"><br>
                 <input onclick="getCanales();" value="getCanales" type="button"> 
                 <select id="canales">
@@ -45,7 +47,9 @@
         
         <script>
             var idToken;
+            debugger;
 	function onSignIn(googleUser) {
+             debugger;
       var profile = googleUser.getBasicProfile();
       console.log('ID: ' + profile.getId());
       console.log('Name: ' + profile.getName());
@@ -59,10 +63,10 @@
       var redirectUrl = 'login';
       //using jquery to post data dynamically
       idToken =  googleUser.getAuthResponse().id_token;
-      var form = $('<form action="' + redirectUrl + '" method="post">' +
-                          '<input type="text" name="id_token" value="' +
-                           googleUser.getAuthResponse().id_token + '" />' +
-                                                                '</form>');
+      //var form = $('<form action="' + redirectUrl + '" method="post">' +
+      //                    '<input type="text" name="id_token" value="' +
+        //                   googleUser.getAuthResponse().id_token + '" />' +
+       //                                                         '</form>');
     //$('body').append(form);
     //form.submit();
     }

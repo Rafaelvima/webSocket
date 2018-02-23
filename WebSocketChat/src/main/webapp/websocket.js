@@ -2,12 +2,6 @@
 var wsUri = "ws://localhost:8080/WebSocketChat/endpoint";
 console.log("Connecting to " + wsUri);
 var token = "Token";
-//var user=document.getElementById("user");
-//var options = {
-//  headers: {
-//    "X-Auth-Token" : token
-//  }
-//};
 var websocket;
 
 function conectar() {
@@ -32,6 +26,7 @@ var aesUtil = new AesUtil(keySize, iterationCount);
 
 
 function getCanales(){
+    
      var iv = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex);
     var salt = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex);
 
@@ -62,7 +57,8 @@ function sayHello() {
     var texto = aesUtil.encrypt(salt, iv,passphrase, myField.value);
     
     writeToScreen("SENT (text): " + aesUtil.decrypt(salt, iv,passphrase, texto));
-
+    
+    
     var object = {
         "destino": destino.value,
         "tipo": "texto",
@@ -72,9 +68,9 @@ function sayHello() {
         "iv": iv
     };
 
-
+ writeToScreen("SENT (text): " + JSON.stringify(object));
     websocket.send(JSON.stringify(object));
-    writeToScreen("SENT (text): " + JSON.stringify(object));
+   
 }
 
 function echoBinary() {
