@@ -9,7 +9,7 @@ var token = "Token";
 //  }
 //};
 var websocket;
-var output = document.getElementById("output");
+
 function conectar() {
     websocket = new WebSocket(wsUri + "/" + user.value + "/" + pass.value, []);
     websocket.onopen = function (evt) {
@@ -25,6 +25,7 @@ function conectar() {
         onClose(evt)
     };
 }
+var output = document.getElementById("output");
 var iterationCount = 1000;
 var keySize = 128;
 var aesUtil = new AesUtil(keySize, iterationCount);
