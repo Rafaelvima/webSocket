@@ -14,7 +14,7 @@
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <meta name="google-signin-scope" content="profile email">
 <meta name="google-signin-client_id"
-     content="1027953223368-th3hh3onqnevoft8sgliam4kvntmtrvj.apps.googleusercontent.com">
+     content="352038368893-6kias25p6uhp0t028cmepjuk3rj7adsm.apps.googleusercontent.com">
     </head>
     <body>
         <h1>Getting Started with JSR 356 - Annotated Endpoint</h1>
