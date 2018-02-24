@@ -45,6 +45,7 @@ public class PrimerEndpoint {
 
       session.getUserProperties().put("user", user);
       if (!user.equals("google")) {
+          
             session.getUserProperties().put("login",
               "OK");
             
@@ -100,7 +101,7 @@ public class PrimerEndpoint {
                     case "texto":
                         //descifrar contenido del mensaje.
 
-                        mensaje.setContenido(aes.encrypt(mensaje.getSalt(), mensaje.getIv(), mensaje.getKey(), "mensaje del servidor"));
+                        mensaje.setContenido(aes.encrypt(mensaje.getSalt(), mensaje.getIv(), mensaje.getKey(), mensaje.getContenido()));
 
                         for (Session s : sessionQueManda.getOpenSessions()) {
                             try {
@@ -116,6 +117,7 @@ public class PrimerEndpoint {
                         break;
                     case "canales":
                         //descifrar contenido del mensaje.
+                        //aqui hay que hacer la select del array de todos los canales
                         ArrayList<String> canales = new ArrayList<>();
                         canales.add("canal2");
                         canales.add("to lo bueno");
