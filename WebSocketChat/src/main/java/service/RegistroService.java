@@ -5,7 +5,7 @@
  */
 package service;
 
-import DAO.RegistroDAO;
+import dao.RegistroDAO;
 import java.util.List;
 import model.Registro;
 
@@ -20,5 +20,11 @@ public class RegistroService {
         RegistroDAO dao = new RegistroDAO();
         
         return dao.getAllRegistrosJDBCTemplate();
+    }
+     public boolean comprobarUser()
+    {
+        RegistroDAO dao = new RegistroDAO();
+        
+        return dao.comprobarUser();
     }
 }

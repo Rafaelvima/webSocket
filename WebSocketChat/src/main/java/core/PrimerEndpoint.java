@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Source;
+package core;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ import model.MensajeCifrado;
 import model.MessageDecoder;
 import model.MessageEncoder;
 import util.AesUtil;
+import service.RegistroService;
 //import model.UserWS;
 
 /**
@@ -45,9 +46,13 @@ public class PrimerEndpoint {
 
       session.getUserProperties().put("user", user);
       if (!user.equals("google")) {
-          
+          if(RegistroService.comprobarUser(user,pass)){
             session.getUserProperties().put("login",
-              "OK");
+              "OK");}
+          else{
+               session.getUserProperties().put("login",
+              "MAL");
+          }
             
         } else {
             session.getUserProperties().put("login",
@@ -56,17 +61,6 @@ public class PrimerEndpoint {
       //session.close();
     }
     
-    
-//    @OnMessage
-//    public void echoText(String mensaje, Session sessionQueManda) throws IOException {
-//        for (Session s : sessionQueManda.getOpenSessions()) {
-//            String user= (String)sessionQueManda.getUserProperties().get("user");
-//            if (!s.equals(sessionQueManda)) {
-//                s.getBasicRemote().sendText(user+" dijo: "+mensaje);
-//            }            
-//        }
-//    }
-    //id oscar
      @OnMessage
     public void echoText(MensajeCifrado mensaje, Session sessionQueManda) throws IOException {
         if (!sessionQueManda.getUserProperties().get("login").equals("OK")) {
