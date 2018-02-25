@@ -5,8 +5,9 @@
  */
 package service;
 
+import DAO.RegistroDAO;
 import java.util.List;
-import model.Login;
+import model.Registro;
 
 /**
  *
@@ -14,10 +15,10 @@ import model.Login;
  */
 public class RegistroService {
     
-    public List<Alumno> getAllAlumnos()
+    public List<Registro> getAllRegistros()
     {
-        AlumnosDAO dao = new AlumnosDAO();
+        RegistroDAO dao = new RegistroDAO();
         
-        return dao.getAllAlumnosJDBCTemplate();
+        return dao.getAllRegistrosJDBCTemplate();
     }
 }

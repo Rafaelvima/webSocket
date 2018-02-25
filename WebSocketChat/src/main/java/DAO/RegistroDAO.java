@@ -5,10 +5,24 @@
  */
 package DAO;
 
+import java.util.List;
+import model.Registro;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 /**
  *
  * @author Rafa
  */
 public class RegistroDAO {
-    
+     public List<Registro> getAllRegistrosJDBCTemplate() {
+     
+        JdbcTemplate jtm = new JdbcTemplate(
+          DBConnection.getInstance().getDataSource());
+        List<Registro> registros = jtm.query("Select * from REGISTROS",
+          new BeanPropertyRowMapper(Registro.class));
+        
+        
+        return registros;
+    }
 }
