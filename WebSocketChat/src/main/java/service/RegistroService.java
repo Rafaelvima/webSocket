@@ -21,10 +21,15 @@ public class RegistroService {
         
         return dao.getAllRegistrosJDBCTemplate();
     }
-     public boolean comprobarUser()
+     public boolean comprobarUser(String user )
     {
         RegistroDAO dao = new RegistroDAO();
         
-        return dao.comprobarUser();
+        return dao.comprobarRegistro(user);
+    }
+
+    public int addUser(Registro registro) {
+        RegistroDAO dao = new RegistroDAO();
+        return dao.addUser(registro);
     }
 }

@@ -23,6 +23,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import model.Registro;
 import model.MensajeCifrado;
 import model.MessageDecoder;
 import model.MessageEncoder;
@@ -39,19 +40,23 @@ import service.RegistroService;
   encoders = MessageEncoder.class,
   configurator = ServletAwareConfig.class)
 public class PrimerEndpoint {
-   
+  
      @OnOpen
     public void onOpen(Session session,
             @PathParam("user")String user, @PathParam("pass")String pass) throws IOException {
-
+        RegistroService rs = new RegistroService();
       session.getUserProperties().put("user", user);
+      session.getUserProperties().put("pass", pass);
+
       if (!user.equals("google")) {
-          if(RegistroService.comprobarUser(user,pass)){
-            session.getUserProperties().put("login",
-              "OK");}
+          if(rs.comprobarUser(user)){
+            session.getUserProperties().put("login","OK");}
           else{
-               session.getUserProperties().put("login",
-              "MAL");
+              Registro registro = new Registro();
+              registro.setUser(user);
+              registro.setPass(pass);
+              rs.addUser(registro);
+               session.getUserProperties().put("login", "MAL");
           }
             
         } else {
