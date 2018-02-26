@@ -20,25 +20,15 @@ function conectar() {
     };
 }
 var output = document.getElementById("output");
-var iterationCount = 1000;
-var keySize = 128;
-var aesUtil = new AesUtil(keySize, iterationCount);
+
 
 
 function getCanales(){
-    
-     var iv = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex);
-    var salt = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex);
-
-    var passphrase = "temp";
-
+   
     var object = {
         "destino": destino.value,
         "tipo": "canales",
-        "contenido": "",
-        "key": passphrase,
-        "salt" : salt,
-        "iv": iv
+        "contenido": ""
     };
 
 
@@ -47,28 +37,18 @@ function getCanales(){
 }
 function sayHello() {
     console.log("sayHello: " + myField.value);
-
+    var texto = myField.value;
     
-    var iv = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex);
-    var salt = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex);
-
-    var passphrase = "temp";
-     
-    var texto = aesUtil.encrypt(salt, iv,passphrase, myField.value);
-    
-    writeToScreen("SENT (text): " + aesUtil.decrypt(salt, iv,passphrase, texto));
+    writeToScreen("SENT (text): " +texto);
     
     
     var object = {
         "destino": destino.value,
         "tipo": "texto",
-        "contenido": texto,
-        "key": passphrase,
-        "salt" : salt,
-        "iv": iv
+        "contenido": texto
     };
 
- writeToScreen("SENT (text): " + JSON.stringify(object));
+ writeToScreen("SENT (textito): " + JSON.stringify(object));
     websocket.send(JSON.stringify(object));
    
 }
@@ -107,11 +87,11 @@ function onMessage(evt) {
     if (typeof evt.data == "string") {
         var mensaje = JSON.parse(evt.data);
        
-        var texto = aesUtil.decrypt(mensaje.salt,mensaje.iv,mensaje.key, mensaje.contenido);
+        var texto = mensaje.contenido;
         switch (mensaje.tipo)
         {
             case "texto": 
-                writeToScreen("RECEIVED (text): " + texto);
+                writeToScreen("RECEIVED (textoes): " + texto);
                 break;
             case "canales": 
                 var canales = JSON.parse(texto);

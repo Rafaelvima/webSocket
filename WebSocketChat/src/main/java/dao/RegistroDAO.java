@@ -32,20 +32,21 @@ public class RegistroDAO {
         return registros;
     }
 
-    public boolean comprobarRegistro(String user) {
+    public String comprobarRegistro(String user) {
         
         
         
-          boolean existe = false;
+          String existe = null;
         try {
             JdbcTemplate jtm = new JdbcTemplate(DBConnection.getInstance().getDataSource());
 //            String nombres = (String)jtm.queryForObject("SELECT nombre FROM registro where nombre=",new Object[] { user }, String.class);
-            String nombres = (String)jtm.queryForObject("SELECT nombre FROM registro where nombre=", String.class,user);
-            if (nombres != null) {
-                existe = true;
+            String pass = (String)jtm.queryForObject("SELECT pass FROM registro where nombre=", String.class,user);
+            if (pass != null) {
+                existe = pass;
             }
         } catch (Exception ex) {
             Logger.getLogger(RegistroDAO.class.getName()).log(Level.SEVERE, null, ex);
+            existe=null;
         }
         return existe;
         
@@ -57,7 +58,7 @@ public class RegistroDAO {
         
         try {
             JdbcTemplate jtm = new JdbcTemplate(DBConnection.getInstance().getDataSource());
-            filas = jtm.update("insert into registros(nombre,pass) values(?,?)", r.getUser(), r.getPass());
+            filas = jtm.update("insert into registro(nombre,pass) values(?,?)", r.getUser(), r.getPass());
             if (filas == 0) {
                 r = null;
             }

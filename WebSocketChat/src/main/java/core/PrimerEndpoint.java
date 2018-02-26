@@ -5,6 +5,8 @@
  */
 package core;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -17,6 +19,8 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -27,7 +31,7 @@ import model.Registro;
 import model.MensajeCifrado;
 import model.MessageDecoder;
 import model.MessageEncoder;
-import util.AesUtil;
+import util.PasswordHash;
 import service.RegistroService;
 //import model.UserWS;
 
@@ -43,20 +47,21 @@ public class PrimerEndpoint {
   
      @OnOpen
     public void onOpen(Session session,
-            @PathParam("user")String user, @PathParam("pass")String pass) throws IOException {
+            @PathParam("user")String user, @PathParam("pass")String pass) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         RegistroService rs = new RegistroService();
       session.getUserProperties().put("user", user);
       session.getUserProperties().put("pass", pass);
-
       if (!user.equals("google")) {
-          if(rs.comprobarUser(user)){
+          if(rs.comprobarUser(user)!=null && PasswordHash.getInstance().validatePassword(pass,rs.comprobarUser(user) )){
             session.getUserProperties().put("login","OK");}
           else{
+              session.getUserProperties().put("login", "MAL");
               Registro registro = new Registro();
               registro.setUser(user);
-              registro.setPass(pass);
+              registro.setPass(PasswordHash.getInstance().createHash(pass));
               rs.addUser(registro);
-               session.getUserProperties().put("login", "MAL");
+              session.getUserProperties().put("login","OK");
+               
           }
             
         } else {
@@ -68,6 +73,7 @@ public class PrimerEndpoint {
     
      @OnMessage
     public void echoText(MensajeCifrado mensaje, Session sessionQueManda) throws IOException {
+      RegistroService rs = new RegistroService();
         if (!sessionQueManda.getUserProperties().get("login").equals("OK")) {
             try {
                 // comprobar login
@@ -77,6 +83,8 @@ public class PrimerEndpoint {
                 sessionQueManda.getUserProperties().put("user", name);
                 System.out.println(payLoad.getJwtId());
                 String email = payLoad.getEmail();
+                rs.comprobarUser(email);
+                
                 sessionQueManda.getUserProperties().put("login", "OK");
             } catch (Exception ex) {
                 try {
@@ -92,15 +100,14 @@ public class PrimerEndpoint {
             try {
 //                ObjectMapper mapper = new ObjectMapper();
 //                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//                MensajeCifrado meta = mapper.readValue(mensaje,
-//                  new TypeReference<MensajeCifrado>() {
+//                MensajeCifrado meta = (MensajeCifrado) mapper.readValue(mensaje, new TypeReference<MensajeCifrado>() {
 //                  });
-                AesUtil aes = new AesUtil(128, 1000);
+               
                 switch (mensaje.getTipo()) {
                     case "texto":
                         //descifrar contenido del mensaje.
 
-                        mensaje.setContenido(aes.encrypt(mensaje.getSalt(), mensaje.getIv(), mensaje.getKey(), mensaje.getContenido()));
+                        mensaje.setContenido(mensaje.getContenido());
 
                         for (Session s : sessionQueManda.getOpenSessions()) {
                             try {
@@ -121,7 +128,7 @@ public class PrimerEndpoint {
                         canales.add("canal2");
                         canales.add("to lo bueno");
                         ObjectMapper mapper = new ObjectMapper();
-                        mensaje.setContenido(aes.encrypt(mensaje.getSalt(), mensaje.getIv(), mensaje.getKey(), mapper.writeValueAsString(canales)));
+                        mensaje.setContenido( mapper.writeValueAsString(canales));
                         sessionQueManda.getBasicRemote().sendObject(mensaje);
                         break;
                 }

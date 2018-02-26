@@ -14,19 +14,19 @@ import model.Registro;
  * @author Rafa
  */
 public class RegistroService {
-    
-    public List<Registro> getAllRegistros()
-    {
+
+    public List<Registro> getAllRegistros() {
         RegistroDAO dao = new RegistroDAO();
-        
+
         return dao.getAllRegistrosJDBCTemplate();
     }
-     public boolean comprobarUser(String user )
-    {
+
+    public String comprobarUser(String user) {
         RegistroDAO dao = new RegistroDAO();
-        
+
         return dao.comprobarRegistro(user);
     }
+  
 
     public Registro addUser(Registro registro) {
         RegistroDAO dao = new RegistroDAO();

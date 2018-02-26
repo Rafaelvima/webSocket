@@ -6,8 +6,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Getting Started with JSR 356 - Annotated Endpoint</title>
-
+ <link rel="stylesheet/css" type="text/css" href="css/estilo.css" />
+ <link rel="stylesheet/less" type="text/css" href="css/estilo.less">
+   <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.0.0/less.min.js" ></script>
 <script type="text/javascript" src="js/lib/excluded/jquery-2.1.3.min.js"></script>
+<script type="text/less" src="css/estilo.less"></script>
 <script type="text/javascript" src="js/lib/aes.js"></script>
 <script type="text/javascript" src="js/lib/pbkdf2.js"></script>
 <script type="text/javascript" src="js/AesUtil.js"></script>
@@ -27,18 +30,13 @@
                 <input onclick="conectar();" value="conectar" type="button"> 
                 <h2>Text Data</h2>
                 <input onclick="sayHello();" value="Enviar mensaje" type="button"> 
-                <input id="destino" value="yo" type="text">
                 <input id="myField" value="WebSocket" type="text"><br>
                 <input onclick="getCanales();" value="getCanales" type="button"> 
-                <select id="canales">
+                <select id="destino">
                     
                 </select>
             </form>
-            <form action=""> 
-                <h2>Binary Data</h2>
-                <input onclick="echoBinary();" value="Echo" type="button"> 
-                <input id="myField2" value="12345678" type="text"><br>
-            </form>
+            
         </div>
         <div id="output"></div>
         <script language="javascript" type="text/javascript" src="websocket.js">
@@ -47,7 +45,6 @@
         <script>
             var idToken;
 	function onSignIn(googleUser) {
-             debugger;
       var profile = googleUser.getBasicProfile();
       console.log('ID: ' + profile.getId());
       console.log('Name: ' + profile.getName());
