@@ -1,5 +1,5 @@
 
-var wsUri = "ws://localhost:8083/WebSocketChat/endpoint";
+var wsUri = "ws://localhost:8080/WebSocketChat/endpoint";
 console.log("Connecting to " + wsUri);
 var token = "Token";
 var websocket;

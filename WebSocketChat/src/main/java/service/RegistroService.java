@@ -28,7 +28,7 @@ public class RegistroService {
         return dao.comprobarRegistro(user);
     }
 
-    public int addUser(Registro registro) {
+    public Registro addUser(Registro registro) {
         RegistroDAO dao = new RegistroDAO();
         return dao.addUser(registro);
     }
