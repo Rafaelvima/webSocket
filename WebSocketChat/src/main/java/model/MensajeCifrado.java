@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author user
@@ -15,13 +17,47 @@ public class MensajeCifrado {
     
     private String contenido;
     
-    private String key;
-    
-    private String iv;
-    
-    private String salt;
-   
     private String user ;
+    
+    private String guardar;
+    
+    private LocalDateTime fecha;
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+    
+    private LocalDateTime fechaInicial;
+    
+    private LocalDateTime fechaFinal;
+
+    public LocalDateTime getFechaInicial() {
+        return fechaInicial;
+    }
+
+    public void setFechaInicial(LocalDateTime fechaInicial) {
+        this.fechaInicial = fechaInicial;
+    }
+
+    public LocalDateTime getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(LocalDateTime fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+
+    public String getGuardar() {
+        return guardar;
+    }
+
+    public void setGuardar(String guardar) {
+        this.guardar = guardar;
+    }
 
     public String getUser() {
         return user;
@@ -30,16 +66,6 @@ public class MensajeCifrado {
     public void setUser(String user) {
         this.user = user;
     }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-    
-    
 
     public String getTipo() {
         return tipo;
@@ -57,23 +83,6 @@ public class MensajeCifrado {
         this.contenido = contenido;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-   
-
-    public String getIv() {
-        return iv;
-    }
-
-    public void setIv(String iv) {
-        this.iv = iv;
-    }
 
 
     

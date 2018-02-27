@@ -39,41 +39,41 @@ import service.RegistroService;
  *
  * @author Rafa
  */
-@ServerEndpoint( value = "/endpoint/{user}/{pass}",
+@ServerEndpoint(value = "/endpoint/{user}/{pass}",
         decoders = MessageDecoder.class,
-  encoders = MessageEncoder.class,
-  configurator = ServletAwareConfig.class)
+        encoders = MessageEncoder.class,
+        configurator = ServletAwareConfig.class)
 public class PrimerEndpoint {
-  
-     @OnOpen
+
+    @OnOpen
     public void onOpen(Session session,
-            @PathParam("user")String user, @PathParam("pass")String pass) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+            @PathParam("user") String user, @PathParam("pass") String pass) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         RegistroService rs = new RegistroService();
-      session.getUserProperties().put("user", user);
-      session.getUserProperties().put("pass", pass);
-      if (!user.equals("google")) {
-          if(rs.comprobarUser(user)!=null && PasswordHash.getInstance().validatePassword(pass,rs.comprobarUser(user) )){
-            session.getUserProperties().put("login","OK");}
-          else{
-              session.getUserProperties().put("login", "MAL");
-              Registro registro = new Registro();
-              registro.setUser(user);
-              registro.setPass(PasswordHash.getInstance().createHash(pass));
-              rs.addUser(registro);
-              session.getUserProperties().put("login","OK");
-               
-          }
-            
+        session.getUserProperties().put("user", user);
+        session.getUserProperties().put("pass", pass);
+        if (!user.equals("google")) {
+            if (rs.comprobarUser(user) != null && PasswordHash.getInstance().validatePassword(pass, rs.comprobarUser(user))) {
+                session.getUserProperties().put("login", "OK");
+            } else {
+                Registro registro = new Registro();
+                registro.setUser(user);
+                registro.setPass(PasswordHash.getInstance().createHash(pass));
+                rs.addUser(registro);
+                session.getUserProperties().put("login", "OK");
+
+            }
+
         } else {
-            session.getUserProperties().put("login",
-              "NO");
+
+            session.getUserProperties().put("login", "NO");
+
         }
-      //session.close();
+        //session.close();
     }
-    
-     @OnMessage
+
+    @OnMessage
     public void echoText(MensajeCifrado mensaje, Session sessionQueManda) throws IOException {
-      RegistroService rs = new RegistroService();
+        RegistroService rs = new RegistroService();
         if (!sessionQueManda.getUserProperties().get("login").equals("OK")) {
             try {
                 // comprobar login
@@ -83,8 +83,16 @@ public class PrimerEndpoint {
                 sessionQueManda.getUserProperties().put("user", name);
                 System.out.println(payLoad.getJwtId());
                 String email = payLoad.getEmail();
-                rs.comprobarUser(email);
                 
+                if (rs.comprobarUser(email) != null && rs.comprobarUser(email).equals("google")) {
+                    sessionQueManda.getUserProperties().put("login", "OK");
+                } else {
+                    Registro registro = new Registro();
+                    registro.setUser(email);
+                    registro.setPass("google");
+                    rs.addUser(registro);
+                    sessionQueManda.getUserProperties().put("login", "OK");
+                }
                 sessionQueManda.getUserProperties().put("login", "OK");
             } catch (Exception ex) {
                 try {
@@ -96,21 +104,17 @@ public class PrimerEndpoint {
             }
 
         } else {
-            
+
             try {
-//                ObjectMapper mapper = new ObjectMapper();
-//                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//                MensajeCifrado meta = (MensajeCifrado) mapper.readValue(mensaje, new TypeReference<MensajeCifrado>() {
-//                  });
-               
+
                 switch (mensaje.getTipo()) {
                     case "texto":
-                        //descifrar contenido del mensaje.
-
-                        mensaje.setContenido(mensaje.getContenido());
-
                         for (Session s : sessionQueManda.getOpenSessions()) {
                             try {
+                                
+                                if(mensaje.getGuardar()){
+                                    
+                                }
                                 String user = (String) sessionQueManda.getUserProperties().get("user");
                                 mensaje.setUser(user);
                                 //if (!s.equals(sessionQueManda)) {
@@ -128,7 +132,7 @@ public class PrimerEndpoint {
                         canales.add("canal2");
                         canales.add("to lo bueno");
                         ObjectMapper mapper = new ObjectMapper();
-                        mensaje.setContenido( mapper.writeValueAsString(canales));
+                        mensaje.setContenido(mapper.writeValueAsString(canales));
                         sessionQueManda.getBasicRemote().sendObject(mensaje);
                         break;
                 }
@@ -136,8 +140,7 @@ public class PrimerEndpoint {
             } catch (Exception ex) {
                 Logger.getLogger(PrimerEndpoint.class.getName()).log(Level.SEVERE, null, ex);
             }
-    }
+        }
     }
 
-    
 }

@@ -1,5 +1,5 @@
 
-var wsUri = "ws://localhost:8080/WebSocketChat/endpoint";
+var wsUri = "ws://localhost:8083/WebSocketChat/endpoint";
 console.log("Connecting to " + wsUri);
 var token = "Token";
 var websocket;
@@ -23,8 +23,8 @@ var output = document.getElementById("output");
 
 
 
-function getCanales(){
-   
+function getCanales() {
+
     var object = {
         "destino": destino.value,
         "tipo": "canales",
@@ -33,24 +33,25 @@ function getCanales(){
 
 
     websocket.send(JSON.stringify(object));
-   
+
 }
 function sayHello() {
     console.log("sayHello: " + myField.value);
     var texto = myField.value;
-    
-    writeToScreen("SENT (text): " +texto);
-    
-    
+    writeToScreen("SENT (text): " + texto);
+    var hoy= new Date();
+
     var object = {
-        "destino": destino.value,
+        "destino": canal.value,
         "tipo": "texto",
-        "contenido": texto
+        "contenido": texto,
+        "guardar": guarda.checked,
+        "fecha":hoy
     };
 
- writeToScreen("SENT (textito): " + JSON.stringify(object));
+    writeToScreen("SENT (textito): " + JSON.stringify(object));
     websocket.send(JSON.stringify(object));
-   
+
 }
 
 function echoBinary() {
@@ -71,10 +72,10 @@ function onOpen() {
     if (user.value == "google")
     {
         var object = {
-        "destino": destino.value,
-        "tipo": "texto",
-        "contenido": idToken
-    };
+            "destino": canal.value,
+            "tipo": "texto",
+            "contenido": idToken
+        };
         websocket.send(JSON.stringify(object));
     }
 }
@@ -86,25 +87,25 @@ function onClose() {
 function onMessage(evt) {
     if (typeof evt.data == "string") {
         var mensaje = JSON.parse(evt.data);
-       
+
         var texto = mensaje.contenido;
         switch (mensaje.tipo)
         {
-            case "texto": 
+            case "texto":
                 writeToScreen("RECEIVED (textoes): " + texto);
                 break;
-            case "canales": 
+            case "canales":
                 var canales = JSON.parse(texto);
                 for (var canal in canales)
                 {
                     $("#canales").append(new Option(canales[canal], canales[canal]));
                 }
                 writeToScreen("RECEIVED (text): " + texto);
-                
+
                 break;
         }
-        
-       
+
+
     } else {
         writeToScreen("RECEIVED (binary): " + evt.data);
     }
@@ -120,3 +121,24 @@ function writeToScreen(message) {
     pre.innerHTML = message;
     output.appendChild(pre);
 }
+function cargarMensajes(evt) {
+    console.log("fechas");
+
+    var fi = fechaInicial.value;
+    var ff = fechaFinal.value;
+//    var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+//    var dateini = new Date(fi.replace(pattern, '$3-$2-$1'));
+//    var datefinal = new Date(ff.replace(pattern, '$3-$2-$1'));
+
+  console.log(fi + ff);
+    var object = {
+        "tipo": "carga",
+        "contenido": null,
+        "fechaInicial": fi,
+        "fechaFinal": ff
+    };
+
+    writeToScreen("SENT (textito): " + JSON.stringify(object));
+    websocket.send(JSON.stringify(object));
+}
+
