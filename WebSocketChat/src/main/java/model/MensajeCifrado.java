@@ -5,7 +5,7 @@
  */
 package model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  *
@@ -21,33 +21,33 @@ public class MensajeCifrado {
     
     private String guardar;
     
-    private LocalDateTime fecha;
+    private Date fecha;
 
-    public LocalDateTime getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
     
-    private LocalDateTime fechaInicial;
+    private Date fechaInicial;
     
-    private LocalDateTime fechaFinal;
+    private Date fechaFinal;
 
-    public LocalDateTime getFechaInicial() {
+    public Date getFechaInicial() {
         return fechaInicial;
     }
 
-    public void setFechaInicial(LocalDateTime fechaInicial) {
+    public void setFechaInicial(Date fechaInicial) {
         this.fechaInicial = fechaInicial;
     }
 
-    public LocalDateTime getFechaFinal() {
+    public Date getFechaFinal() {
         return fechaFinal;
     }
 
-    public void setFechaFinal(LocalDateTime fechaFinal) {
+    public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
 
