@@ -61,7 +61,6 @@ function echoBinary() {
     for (var i = 0; i < bytes.length; i++) {
         bytes[i] = i;
     }
-//                alert(buffer);
     websocket.send(buffer);
     writeToScreen("SENT (binary): " + buffer.byteLength + " bytes");
 }
@@ -98,7 +97,7 @@ function onMessage(evt) {
                 var canales = JSON.parse(texto);
                 for (var canal in canales)
                 {
-                    $("#canales").append(new Option(canales[canal], canales[canal]));
+                    $("#destino").append(new Option(canales[canal], canales[canal]));
                 }
                 writeToScreen("RECEIVED (text): " + texto);
 

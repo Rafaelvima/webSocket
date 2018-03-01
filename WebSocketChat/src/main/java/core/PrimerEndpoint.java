@@ -27,10 +27,12 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import model.Mensaje;
 import model.Registro;
 import model.MensajeCifrado;
 import model.MessageDecoder;
 import model.MessageEncoder;
+import service.MensajeService;
 import util.PasswordHash;
 import service.RegistroService;
 //import model.UserWS;
@@ -109,12 +111,17 @@ public class PrimerEndpoint {
 
                 switch (mensaje.getTipo()) {
                     case "texto":
+                        if(mensaje.getGuardar()){
+                            MensajeService ms = new MensajeService();
+                            Mensaje nuevoMensaje = new Mensaje();
+                            nuevoMensaje.setContenido(mensaje.getContenido());
+                            nuevoMensaje.setFecha(mensaje.getFecha());
+                            nuevoMensaje.setId_canal(mensaje.getDestino());
+                            nuevoMensaje.setNombre_user((String) sessionQueManda.getUserProperties().get("user"));
+                            ms.addMensaje(nuevoMensaje);
+                                }
                         for (Session s : sessionQueManda.getOpenSessions()) {
                             try {
-                                
-                                if(mensaje.getGuardar()){
-                                    
-                                }
                                 String user = (String) sessionQueManda.getUserProperties().get("user");
                                 mensaje.setUser(user);
                                 //if (!s.equals(sessionQueManda)) {
@@ -126,8 +133,7 @@ public class PrimerEndpoint {
                         }
                         break;
                     case "canales":
-                        //descifrar contenido del mensaje.
-                        //aqui hay que hacer la select del array de todos los canales
+                        
                         ArrayList<String> canales = new ArrayList<>();
                         canales.add("canal2");
                         canales.add("to lo bueno");
