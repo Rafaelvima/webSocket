@@ -141,6 +141,10 @@ public class PrimerEndpoint {
                         mensaje.setContenido(mapper.writeValueAsString(canales));
                         sessionQueManda.getBasicRemote().sendObject(mensaje);
                         break;
+                    case "addcanal":
+                        CanalService cs = new CanalService();
+                        cs.addCanal(nombreCanal);
+                            
                 }
 
             } catch (Exception ex) {
