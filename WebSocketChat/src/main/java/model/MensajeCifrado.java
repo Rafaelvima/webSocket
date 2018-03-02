@@ -15,13 +15,25 @@ public class MensajeCifrado {
     
     private String tipo;
     
+    private String destino;
+    
     private String contenido;
     
     private String user ;
     
-    private String guardar;
+    private boolean guardar;
     
     private Date fecha;
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public void setDestino(String destino) {
+        this.destino = destino;
+    }
+    
+    
 
     public Date getFecha() {
         return fecha;
@@ -51,11 +63,11 @@ public class MensajeCifrado {
         this.fechaFinal = fechaFinal;
     }
 
-    public String getGuardar() {
+    public boolean getGuardar() {
         return guardar;
     }
 
-    public void setGuardar(String guardar) {
+    public void setGuardar(boolean guardar) {
         this.guardar = guardar;
     }
 

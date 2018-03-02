@@ -6,6 +6,8 @@
 package service;
 
 import dao.MensajeDAO;
+import java.util.Date;
+import java.util.List;
 import model.Mensaje;
 
 /**
@@ -15,8 +17,12 @@ import model.Mensaje;
 public class MensajeService {
 
     public int addMensaje(Mensaje mensaje) {
-       MensajeDAO mensajedao = new MensajeDAO;
+       MensajeDAO mensajedao = new MensajeDAO();
        return mensajedao.addMensaje(mensaje);
+    }
+    public List<Mensaje> getMensajesIntervalo(Date ini,Date fin){
+          MensajeDAO mensajedao = new MensajeDAO();
+       return mensajedao.getMensajesIntervalo(ini, fin);
     }
     
 }

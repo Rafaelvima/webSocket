@@ -39,32 +39,21 @@ function sayHello() {
     console.log("sayHello: " + myField.value);
     var texto = myField.value;
     writeToScreen("SENT (text): " + texto);
-    var hoy= new Date();
+    var hoy = new Date();
 
     var object = {
         "destino": canal.value,
         "tipo": "texto",
         "contenido": texto,
         "guardar": guarda.checked,
-        "fecha":hoy
+        "fecha": hoy
     };
 
     writeToScreen("SENT (textito): " + JSON.stringify(object));
     websocket.send(JSON.stringify(object));
 
 }
-
-function echoBinary() {
-//                alert("Sending " + myField2.value.length + " bytes")
-    var buffer = new ArrayBuffer(myField2.value.length);
-    var bytes = new Uint8Array(buffer);
-    for (var i = 0; i < bytes.length; i++) {
-        bytes[i] = i;
-    }
-    websocket.send(buffer);
-    writeToScreen("SENT (binary): " + buffer.byteLength + " bytes");
-}
-
+writeToScreen("SENT (binary): " + buffer.byteLength + " bytes");
 function onOpen() {
     console.log("onOpen");
     writeToScreen("CONNECTED");
@@ -99,14 +88,35 @@ function onMessage(evt) {
                 {
                     $("#destino").append(new Option(canales[canal], canales[canal]));
                 }
-                writeToScreen("RECEIVED (text): " + texto);
-
+                break;
+            case "pedirPCanal":
+                var permisito = confirm(mensaje.contenido);
+                if (permisito) {
+                    var object = {
+                        "tipo":"darPCanal",
+                        "id_canal": mensaje.destino,
+                        "user": mensaje.user
+                        
+                    };
+                    websocket.send(JSON.stringify(object));
+                } 
+                break;
+            case "darPCanal":
+                writeToScreen("RECEIVED (textoes): " + mensaje.contenido);
+                break;
+            case "darMensajes":
+                var mensajesFechas = JSON.parse(texto);
+                for (var mensajitos in mensajesFechas)
+                {
+                    writeToScreen("RECEIVED (textoes): " + mensajitos.fecha + "  "+mensajitos.contenido);
+                }
+                
                 break;
         }
 
 
     } else {
-        writeToScreen("RECEIVED (binary): " + evt.data);
+        writeToScreen("Error al enviar el mensaje");
     }
 }
 
@@ -120,21 +130,12 @@ function writeToScreen(message) {
     pre.innerHTML = message;
     output.appendChild(pre);
 }
-function cargarMensajes(evt) {
-    console.log("fechas");
-
-    var fi = fechaInicial.value;
-    var ff = fechaFinal.value;
-//    var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
-//    var dateini = new Date(fi.replace(pattern, '$3-$2-$1'));
-//    var datefinal = new Date(ff.replace(pattern, '$3-$2-$1'));
-
-  console.log(fi + ff);
+function cargarMensajes() {
     var object = {
-        "tipo": "carga",
+        "tipo": "cargaMensajes",
         "contenido": null,
-        "fechaInicial": fi,
-        "fechaFinal": ff
+        "fechaInicial": fechaInicial.value,
+        "fechaFinal": fechaFinal.value
     };
 
     writeToScreen("SENT (textito): " + JSON.stringify(object));

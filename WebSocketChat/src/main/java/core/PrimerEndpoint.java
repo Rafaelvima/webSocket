@@ -21,17 +21,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Date;
+import java.util.List;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import model.Canal;
 import model.Mensaje;
 import model.Registro;
 import model.MensajeCifrado;
 import model.MessageDecoder;
 import model.MessageEncoder;
+import service.CanalesService;
+import service.Canales_usersService;
 import service.MensajeService;
 import util.PasswordHash;
 import service.RegistroService;
@@ -85,7 +90,7 @@ public class PrimerEndpoint {
                 sessionQueManda.getUserProperties().put("user", name);
                 System.out.println(payLoad.getJwtId());
                 String email = payLoad.getEmail();
-                
+
                 if (rs.comprobarUser(email) != null && rs.comprobarUser(email).equals("google")) {
                     sessionQueManda.getUserProperties().put("login", "OK");
                 } else {
@@ -108,43 +113,105 @@ public class PrimerEndpoint {
         } else {
 
             try {
-
-                switch (mensaje.getTipo()) {
+                CanalesService cs = new CanalesService();
+                Canales_usersService cus = new Canales_usersService();
+                MensajeService ms = new MensajeService();
+                Mensaje nuevoMensaje = new Mensaje();
+                Canal nuevoCanal = new Canal();
+                List<Integer> canalesUser = new ArrayList<>();
+                canalesUser = cus.getAllCanalesByUser((String) sessionQueManda.getUserProperties().get("user"));
+                String tipo = mensaje.getTipo();
+                switch (tipo) {
                     case "texto":
-                        if(mensaje.getGuardar()){
-                            MensajeService ms = new MensajeService();
-                            Mensaje nuevoMensaje = new Mensaje();
+                        String origiUser = (String) sessionQueManda.getUserProperties().get("user");
+                        if (mensaje.getGuardar()) {
+                            
                             nuevoMensaje.setContenido(mensaje.getContenido());
                             nuevoMensaje.setFecha(mensaje.getFecha());
                             nuevoMensaje.setId_canal(mensaje.getDestino());
-                            nuevoMensaje.setNombre_user((String) sessionQueManda.getUserProperties().get("user"));
+                            nuevoMensaje.setNombre_user(origiUser);
                             ms.addMensaje(nuevoMensaje);
-                                }
+                        }
                         for (Session s : sessionQueManda.getOpenSessions()) {
                             try {
                                 String user = (String) sessionQueManda.getUserProperties().get("user");
                                 mensaje.setUser(user);
-                                //if (!s.equals(sessionQueManda)) {
-                                s.getBasicRemote().sendObject(mensaje);
-                                //}
+                                if (canalesUser.contains(nuevoMensaje.getId_canal())) {
+                                    if (!s.equals(sessionQueManda)) {
+                                        mensaje.setContenido(nuevoMensaje.getContenido());
+                                        mensaje.setDestino(nuevoMensaje.getId_canal());
+                                        mensaje.setTipo(tipo);
+                                        s.getBasicRemote().sendObject(mensaje);
+                                    }
+                                } else {
+                                    mensaje.setTipo(tipo);
+                                    mensaje.setContenido("EL USUSARIO " + origiUser + "NO TIENE ACCESO AL CANAL" + nuevoMensaje.getId_canal() + "SOLICITA ACCESO");
+                                    mensaje.setDestino("general");
+                                    s.getBasicRemote().sendObject(mensaje);
+                                    mensaje.setUser(user);
+                                    mensaje.setDestino(nuevoMensaje.getId_canal());
+                                    mensaje.setTipo("pedirPCanal");
+                                     mensaje.setContenido("EL USUSARIO " + origiUser + "NO TIENE ACCESO AL CANAL" +nuevoMensaje.getId_canal() + "LE DEJAS QUE PUEDA ENVIAR MENSAJES?");
+                                    s.getBasicRemote().sendObject(mensaje);
+
+                                }
+
                             } catch (IOException ex) {
                                 Logger.getLogger(PrimerEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
+
+                        //el ususario no tiene permiso para escribir por ese canal
                         break;
                     case "canales":
-                        
-                        ArrayList<String> canales = new ArrayList<>();
-                        canales.add("canal2");
-                        canales.add("to lo bueno");
+
+                        List<Canal> canales = new ArrayList<>();
+                        canales = cs.getAllCanales();
                         ObjectMapper mapper = new ObjectMapper();
                         mensaje.setContenido(mapper.writeValueAsString(canales));
                         sessionQueManda.getBasicRemote().sendObject(mensaje);
                         break;
                     case "addcanal":
-                        CanalService cs = new CanalService();
-                        cs.addCanal(nombreCanal);
-                            
+                        String userorigi = (String) sessionQueManda.getUserProperties().get("user");
+                        cs.addCanal(nuevoCanal);
+                        for (Session s : sessionQueManda.getOpenSessions()) {
+                            try {
+                                String user = (String) sessionQueManda.getUserProperties().get("user");
+                                mensaje.setUser(user);
+                                mensaje.setDestino("general");
+                                mensaje.setContenido("NUEVO CANAL AÑADIDO POR" + userorigi);
+
+                                if (!s.equals(sessionQueManda)) {
+                                    s.getBasicRemote().sendObject(mensaje);
+                                }
+                            } catch (IOException ex) {
+                                Logger.getLogger(PrimerEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        break;
+                    
+                    case "darPCanal":
+                        cus.getPermisoUser(Integer.parseInt(mensaje.getDestino()), mensaje.getUser());
+                        mensaje.setTipo("darPCanal");
+                        mensaje.setContenido("USUARIO"+mensaje.getUser()+" AÑADIDO CORRECTAMENTE al canal"+mensaje.getDestino());
+                        sessionQueManda.getBasicRemote().sendObject(mensaje);
+                        
+                        break;
+                    case "cargarMensajes":
+                        List<Mensaje> AllMensajesfechas = new ArrayList<>();
+                        AllMensajesfechas = ms.getMensajesIntervalo(mensaje.getFechaInicial(), mensaje.getFechaFinal());
+                            try {
+                         ObjectMapper mappera = new ObjectMapper();
+                         mensaje.setTipo("darMensajes");
+                        mensaje.setContenido(mappera.writeValueAsString(AllMensajesfechas));
+                        sessionQueManda.getBasicRemote().sendObject(mensaje);
+                                
+
+                            } catch (IOException ex) {
+                                Logger.getLogger(PrimerEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        
+                        break;
                 }
 
             } catch (Exception ex) {

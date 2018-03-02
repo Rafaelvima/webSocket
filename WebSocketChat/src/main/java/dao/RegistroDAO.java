@@ -27,14 +27,11 @@ public class RegistroDAO {
           DBConnection.getInstance().getDataSource());
         List<Registro> registros = jtm.query("Select * from REGISTROS",
           new BeanPropertyRowMapper(Registro.class));
-        
-        
+
         return registros;
     }
 
     public String comprobarRegistro(String user) {
-        
-        
         
           String existe = null;
         try {

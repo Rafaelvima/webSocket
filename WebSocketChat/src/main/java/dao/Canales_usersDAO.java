@@ -5,35 +5,43 @@
  */
 package dao;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Mensaje;
+import model.Canales_users;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  *
- * @author rafa
+ * @author Rafa
  */
-public class MensajeDAO {
+public class Canales_usersDAO {
 
-    public List<Mensaje> getMensajesIntervalo(Date i, Date f){
+    public List<Integer> addCanales_users(String user) {
          JdbcTemplate jtm = new JdbcTemplate(
           DBConnection.getInstance().getDataSource());
-        List<Mensaje> registros = jtm.query("Select * from mensajes where fecha between ? and ? ",
-          new BeanPropertyRowMapper(Mensaje.class),i,f);
+        List<Integer> registros = jtm.query("Select id_canal from canales_users where user=?",
+          new BeanPropertyRowMapper(Integer.class),user);
+        
+        
+        return registros;
+    }
+    public List<Canales_users> getAllCanales_users(){
+         JdbcTemplate jtm = new JdbcTemplate(
+          DBConnection.getInstance().getDataSource());
+        List<Canales_users> registros = jtm.query("Select * from canales_users",
+          new BeanPropertyRowMapper(Canales_users.class));
 
         return registros;
     }
-
-    public int addMensaje(Mensaje m) {
-       int filas = 0;
+    public int getPermisoUser(int c, String u) {
+        int filas = 0;
         
         try {
             JdbcTemplate jtm = new JdbcTemplate(DBConnection.getInstance().getDataSource());
-            filas = jtm.update("insert into mensajes(mensaje,fecha,id_canal,nombre_user) values(?,?,?,?)", m.getContenido(), m.getFecha(),m.getId_canal(),m.getNombre_user());
+            filas = jtm.update("insert into canales_users(id_canal,user) values(?,?)", c,u);
             
         } catch (Exception ex) {
             Logger.getLogger(RegistroDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -41,6 +49,5 @@ public class MensajeDAO {
         }
         return filas;
     }
-    
     
 }
