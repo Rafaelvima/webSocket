@@ -33,9 +33,9 @@ $uris = 'http://localhost:8083/Examen2EVA/rest/restusuarios';
                     }
                 }
 
-                echo "Ole que buena";
+                echo "Ole que buena aqui tiene sus cajas";
             } else {
-                echo "error de algo";
+                echo "error de algo no puedes ver tus cosas (login mal)";
             }
             break;
             case "add_caja":
