@@ -1,0 +1,12 @@
+{
+    "name": "vendor/examen-troll",
+    "description": "Description of project ExamenTroll.",
+    "authors": [
+        {
+            "name": "Rafa",
+            "email": "your@email.here"
+        }
+    ],"require": {
+    "guzzlehttp/guzzle": "6.3.0"
+    }
+}
